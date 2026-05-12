@@ -7,7 +7,7 @@ import java.nio.file.*;
 
 public class AuthManager {
 
-    private static final String USERS_DIR = System.getProperty("user.home") + "/HollowThrone/users/";
+    private static final String USERS_DIR = "data/users/";
     private static final Gson gson = new Gson();
 
     public static boolean register(String username, String password) {

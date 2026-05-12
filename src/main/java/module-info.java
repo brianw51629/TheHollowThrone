@@ -7,6 +7,8 @@ module com.brianwallenrod.thehollowthrone.hollowthrone {
     opens com.brianwallenrod.thehollowthrone to javafx.fxml;
     opens com.brianwallenrod.thehollowthrone.controllers to javafx.fxml;
     opens com.brianwallenrod.thehollowthrone.auth to com.google.gson;
+    opens com.brianwallenrod.thehollowthrone.game to com.google.gson;
+    opens com.brianwallenrod.thehollowthrone.save to com.google.gson;
 
     exports com.brianwallenrod.thehollowthrone;
 }

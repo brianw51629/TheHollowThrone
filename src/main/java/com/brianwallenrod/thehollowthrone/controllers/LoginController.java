@@ -3,10 +3,13 @@ package com.brianwallenrod.thehollowthrone.controllers;
 import com.brianwallenrod.thehollowthrone.Main;
 import com.brianwallenrod.thehollowthrone.Session;
 import com.brianwallenrod.thehollowthrone.auth.AuthManager;
+import com.brianwallenrod.thehollowthrone.save.SaveManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
+
+import java.io.IOException;
 
 public class LoginController {
 
@@ -14,7 +17,7 @@ public class LoginController {
     @FXML private PasswordField passwordField;
 
     @FXML
-    private void handleLogin() {
+    private void handleLogin() throws IOException {
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
 
@@ -27,8 +30,11 @@ public class LoginController {
 
         if (success) {
             Session.setCurrentUser(username);
-            System.out.println("Logged in as: " + Session.getCurrentUser());
-            // Main.switchScene("character-select"); // coming soon
+            if (SaveManager.hasSave(username)) {
+                Main.switchScene("main-game");
+            } else {
+                Main.switchScene("create-character");
+            }
         } else {
             showAlert("Invalid username or password.");
         }
