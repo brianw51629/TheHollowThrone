@@ -14,7 +14,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
         stage.setTitle("The Hollow Throne");
-        stage.setResizable(false);
+        stage.setMaximized(true);
         switchScene("login");
         stage.show();
     }

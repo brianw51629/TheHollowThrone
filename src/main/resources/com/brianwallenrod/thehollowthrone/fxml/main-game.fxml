@@ -1,12 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.Label?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/26"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.brianwallenrod.thehollowthrone.controllers.MainGameController">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.brianwallenrod.thehollowthrone.controllers.MainGameController">
+
     <children>
-        <Label text="Main Game - Coming Soon" layoutX="220" layoutY="180"/>
+
+        <!-- TOP BAR -->
+        <Button fx:id="quitButton" onAction="#handleQuit" prefHeight="36.0" prefWidth="120.0" text="QUIT" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
+
+        <Button fx:id="saveButton" onAction="#handleSave" prefHeight="36.0" prefWidth="120.0" text="SAVE" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="10.0" />
+
+        <Button fx:id="loadButton" onAction="#handleLoad" prefHeight="36.0" prefWidth="120.0" text="LOAD" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="10.0" />
+
+        <Button fx:id="inventoryButton" onAction="#handleInventory" prefHeight="36.0" prefWidth="120.0" text="INVENTORY" AnchorPane.leftAnchor="440.0" AnchorPane.topAnchor="10.0" />
+
+        <!-- Divider under top bar -->
+        <Line endX="1920" endY="0" layoutX="0.0" layoutY="55.0" startX="0" startY="0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="55.0" />
+
+        <!-- Divider between left panel and map -->
+        <Line endX="0" endY="1080" layoutX="640.0" layoutY="55.0" startX="0" startY="0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="640.0" AnchorPane.topAnchor="55.0" />
+
+        <!-- LEFT PANEL: Character image fills top portion of left third -->
+        <ImageView fx:id="characterView" fitHeight="800.0" fitWidth="600.0" layoutX="23.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="240.0" AnchorPane.leftAnchor="23.0" AnchorPane.rightAnchor="1298.0" AnchorPane.topAnchor="96.0" />
+
+        <!-- Stats box background pinned to bottom left -->
+        <Rectangle fx:id="statsBox" arcHeight="10" arcWidth="10" fill="#e8e8e8" height="210.0" stroke="#999999" width="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
+
+        <!-- Stats labels left column -->
+        <Label fx:id="nameLabel" text="Name:" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="20.0" />
+        <Label fx:id="classLabel" text="Class:" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="20.0" />
+        <Label fx:id="levelLabel" text="Level: 1" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="20.0" />
+        <Label fx:id="hpLabel" text="HP: 0/0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="20.0" />
+
+        <!-- Stats labels right column -->
+        <Label fx:id="strLabel" text="STR: 0" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="340.0" />
+        <Label fx:id="dexLabel" text="DEX: 0" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="340.0" />
+        <Label fx:id="intLabel" text="INT: 0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="340.0" />
+        <Label text="XP: 0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="340.0" fx:id="xpLabel" />
+
+        <!-- MAP: fills right 2/3 -->
+        <GridPane fx:id="mapGrid" hgap="4.0" vgap="4.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="650.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="65.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+            </rowConstraints>
+        </GridPane>
+
     </children>
 </AnchorPane>

@@ -10,6 +10,7 @@ public class GameCharacter {
     private int dexterity;
     private int intelligence;
     private int xp;
+    private int gold;
 
     public GameCharacter() {}
 
@@ -18,7 +19,22 @@ public class GameCharacter {
         this.characterClass = characterClass;
         this.level = 1;
         this.xp = 0;
+        this.gold = 0;
         applyClassStats();
+    }
+
+    public int getGold() { return gold; }
+    public void setGold(int gold) { this.gold = gold; }
+    public void takeDamage(int amount) {
+        hp = Math.max(0, hp - amount);
+    }
+
+    public void heal(int amount) {
+        hp = Math.min(maxHp, hp + amount);
+    }
+
+    public boolean isAlive() {
+        return hp > 0;
     }
 
     private void applyClassStats() {
