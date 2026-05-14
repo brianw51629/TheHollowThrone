@@ -144,6 +144,9 @@
                         <option>--add-modules</option>
                         <option>javafx.controls,javafx.fxml,javafx.graphics,javafx.base</option>
                     </javaOptions>
+                    <winDirChooser>true</winDirChooser>
+                    <winShortcut>true</winShortcut>
+                    <winMenu>true</winMenu>
                 </configuration>
             </plugin>
         </plugins>
