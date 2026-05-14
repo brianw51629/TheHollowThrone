@@ -30,6 +30,8 @@ public class LoginController {
 
         if (success) {
             Session.setCurrentUser(username);
+            Session.setCharacter(null); // clear any previous session
+            Session.setWorldMap(null);
             if (SaveManager.hasSave(username)) {
                 Main.switchScene("main-game");
             } else {

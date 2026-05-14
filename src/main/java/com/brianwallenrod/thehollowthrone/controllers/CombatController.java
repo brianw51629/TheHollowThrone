@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.application.Platform;
 import com.brianwallenrod.thehollowthrone.game.Inventory;
 import com.brianwallenrod.thehollowthrone.game.Item;
+import com.brianwallenrod.thehollowthrone.controllers.InventoryController;
 
 public class CombatController {
 
@@ -39,25 +40,32 @@ public class CombatController {
     private boolean combatOver;
     @FXML
     public void initialize() {
-        player = SaveManager.loadCharacter(Session.getCurrentUser());
+        player = Session.getCharacter();
         WorldMap worldMap = Session.getWorldMap();
         enemy = CombatSession.getEnemy();
 
         floorLabel.setText("Floor " + worldMap.getCurrentFloorNumber());
         updateHpLabels();
         loadPlayerImage();
-
         specialButton.setText(CombatEngine.getSpecialName(player));
 
-        playerTurn = CombatEngine.playerGoesFirst(player, enemy);
-        combatOver = false;
-
-        if (playerTurn) {
-            log("You move first!");
+        if (CombatSession.isReturningFromInventory()) {
+            // Restore combat state after inventory visit
+            playerTurn = true;
+            combatOver = false;
+            CombatSession.setReturningFromInventory(false);
+            log("You return from your inventory. Choose your action.");
         } else {
-            log(enemy.getName() + " moves first!");
-            disableButtons();
-            Platform.runLater(() -> enemyTurn());
+            playerTurn = CombatEngine.playerGoesFirst(player, enemy);
+            combatOver = false;
+
+            if (playerTurn) {
+                log("You move first!");
+            } else {
+                log(enemy.getName() + " moves first!");
+                disableButtons();
+                Platform.runLater(() -> enemyTurn());
+            }
         }
     }
 
@@ -69,7 +77,12 @@ public class CombatController {
 
     private void loadPlayerImage() {
         try {
-            var url = getClass().getResource("/com/brianwallenrod/thehollowthrone/assets/placeHolder.gif");
+            String imageName = switch (player.getCharacterClass()) {
+                case WARRIOR -> "warrior.png";
+                case MAGE    -> "mage.png";
+                case ROGUE   -> "rogue.png";
+            };
+            var url = getClass().getResource("/com/brianwallenrod/thehollowthrone/assets/" + imageName);
             if (url != null) {
                 playerView.setImage(new Image(url.toExternalForm()));
             }
@@ -156,17 +169,28 @@ public class CombatController {
     private void handleVictory() {
         combatOver = true;
         boolean leveledUp = CombatEngine.grantRewards(player, enemy);
+        player.clearTempBoosts();
         SaveManager.saveCharacter(Session.getCurrentUser(), player);
         log("You defeated " + enemy.getName() + "!");
         log("Gained " + enemy.getXpReward() + " XP and " + enemy.getGoldReward() + " gold!");
+
         if (leveledUp) {
             log("LEVEL UP! You are now level " + player.getLevel() + "!");
             log("HP, STR, DEX, and INT have increased!");
             showInfo("Level Up! You are now level " + player.getLevel() + "!");
         }
+
         disableButtons();
-        returnToGame();
-        player.clearTempBoosts();
+
+        if (enemy.isBoss() && Session.getWorldMap().getCurrentFloorNumber() == 11) {
+            try {
+                Main.switchScene("ending");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            returnToGame();
+        }
     }
 
     private void returnToGame() {
@@ -263,57 +287,13 @@ public class CombatController {
     @FXML
     private void handleItem() {
         if (!playerTurn || combatOver) return;
-
-        Inventory inventory = player.getInventory();
-        if (inventory.isEmpty()) {
-            log("You have no items!");
-            return;
+        CombatSession.setPlayerTurn(true);
+        CombatSession.setReturningFromInventory(true);
+        InventoryController.setReturnScene("combat");
+        try {
+            Main.switchScene("inventory");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        // Show item selection dialog
-        javafx.scene.control.ChoiceDialog<Item> dialog = new javafx.scene.control.ChoiceDialog<>(
-                inventory.getItem(0), inventory.getItems()
-        );
-        dialog.initOwner(Main.getPrimaryStage());
-        dialog.setTitle("Use Item");
-        dialog.setHeaderText("Select an item to use:");
-        dialog.setContentText("Item:");
-
-        // Display item names properly
-        javafx.util.StringConverter<Item> converter = new javafx.util.StringConverter<>() {
-            public String toString(Item item) {
-                return item == null ? "" : item.getName() + " — " + item.getDescription();
-            }
-            public Item fromString(String s) { return null; }
-        };
-
-        dialog.getDialogPane().setPrefWidth(500);
-        dialog.showAndWait().ifPresent(selectedItem -> {
-            int damage = CombatEngine.useItem(player, enemy, selectedItem);
-            inventory.removeItem(selectedItem);
-            updateHpLabels();
-
-            switch (selectedItem.getType()) {
-                case HEALTH_POTION ->
-                        log("You use a Health Potion! Restored " + selectedItem.getValue() + " HP.");
-                case STRENGTH_ELIXIR ->
-                        log("You drink a Strength Elixir! STR +" + selectedItem.getValue() + " for this combat.");
-                case DEXTERITY_ELIXIR ->
-                        log("You drink a Dexterity Elixir! DEX +" + selectedItem.getValue() + " for this combat.");
-                case ANTIDOTE ->
-                        log("You use an Antidote!");
-                case DAMAGE_ITEM ->
-                        log("You throw a " + selectedItem.getName() + " at " + enemy.getName() + " for " + damage + " damage!");
-            }
-
-            if (!enemy.isAlive()) {
-                handleVictory();
-                return;
-            }
-
-            playerTurn = false;
-            disableButtons();
-            enemyTurn();
-        });
     }
 }

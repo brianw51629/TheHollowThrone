@@ -49,6 +49,7 @@ public class CharacterCreateController {
         }
 
         GameCharacter character = new GameCharacter(name, selectedClass);
+        Session.setCharacter(character);
         SaveManager.saveCharacter(Session.getCurrentUser(), character);
 
         try {

@@ -113,16 +113,16 @@ public class EnemyPool {
 
     // ══════════════════════════ STAT SCALING ══════════════════════════
     private static Enemy scaleEnemy(String name, int floor, boolean isBoss) {
-        int baseHp = 30 + (floor * 15);
-        int baseStr = 5 + (floor * 3);
-        int baseDex = 3 + (floor * 2);
+        int baseHp = 25 + (floor * 8);
+        int baseStr = 4 + (floor * 2);
+        int baseDex = 2 + (floor * 1);
         int baseXp = 20 + (floor * 10);
         int baseGold = 5 + (floor * 5);
 
         if (isBoss) {
-            baseHp *= 2;
-            baseStr = (int)(baseStr * 1.5);
-            baseDex = (int)(baseDex * 1.5);
+            baseHp = (int)(baseHp * 1.5);
+            baseStr = (int)(baseStr * 1.3);
+            baseDex = (int)(baseDex * 1.3);
             baseXp *= 3;
             baseGold *= 3;
         }

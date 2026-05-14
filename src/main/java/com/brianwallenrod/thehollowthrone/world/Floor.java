@@ -10,6 +10,7 @@ public class Floor {
     private int playerRow;
     private int playerCol;
 
+    public Floor() {}
     public Floor(int floorNumber) {
         this.floorNumber = floorNumber;
         this.size = getSizeForFloor(floorNumber);

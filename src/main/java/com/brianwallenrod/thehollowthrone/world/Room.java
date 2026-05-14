@@ -10,7 +10,7 @@ public class Room {
     private boolean visited;
     private boolean revealed;
     private boolean consumed;
-
+    
     public Room() {
         this.type = RoomType.EMPTY;
         this.visited = false;

@@ -44,17 +44,20 @@ public class MainGameController {
 
     @FXML
     public void initialize() {
-        character = SaveManager.loadCharacter(Session.getCurrentUser());
+        if (Session.getCharacter() == null) {
+            character = SaveManager.loadCharacter(Session.getCurrentUser());
+            Session.setCharacter(character);
+        } else {
+            character = Session.getCharacter();
+        }
 
-        // Only create new world if one doesn't exist yet
         if (Session.getWorldMap() == null) {
-            Session.setWorldMap(new WorldMap());
+            WorldMap savedWorld = SaveManager.loadWorld(Session.getCurrentUser());
+            Session.setWorldMap(savedWorld != null ? savedWorld : new WorldMap());
         }
         worldMap = Session.getWorldMap();
 
-        if (character != null) {
-            updateStats();
-        }
+        if (character != null) updateStats();
         loadCharacterImage();
         renderMap();
     }
@@ -73,18 +76,22 @@ public class MainGameController {
 
     private void loadCharacterImage() {
         try {
-            var url = getClass().getResource("/com/brianwallenrod/thehollowthrone/assets/placeHolder.gif");
-            System.out.println("GIF URL: " + url);
-
-            if (url == null) {
-                System.out.println("Resource not found - checking target folder...");
-                return;
+            String imageName = switch (character.getCharacterClass()) {
+                case WARRIOR -> "warrior.png";
+                case MAGE    -> "mage.png";
+                case ROGUE   -> "rogue.png";
+            };
+            var url = getClass().getResource("/com/brianwallenrod/thehollowthrone/assets/" + imageName);
+            if (url != null) {
+                Image img = new Image(url.toExternalForm());
+                characterView.setImage(img);
+                characterView.setFitWidth(620);
+                characterView.setFitHeight(800);
+                characterView.setPreserveRatio(true);
+                characterView.setSmooth(false); // keeps pixel art crisp
             }
-
-            Image gif = new Image(url.toExternalForm());
-            characterView.setImage(gif);
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Could not load character image: " + e.getMessage());
         }
     }
 
@@ -155,7 +162,7 @@ public class MainGameController {
             case HEAL     -> Color.LIGHTGREEN;
             case EXIT     -> Color.CYAN;
             case BOSS     -> Color.CRIMSON;
-            case BOSS_DOOR -> Color.BLACK;
+            case BOSS_DOOR -> Color.web("#2d0050");
         };
     }
 
@@ -174,6 +181,9 @@ public class MainGameController {
         if (room.isConsumed()) return; // already triggered, do nothing
 
         switch (room.getType()) {
+            case SHOP -> {
+                try { Main.switchScene("shop"); } catch (Exception e) { e.printStackTrace(); }
+            }
             case HEAL -> {
                 int healAmount = character.getMaxHp() / 4;
                 character.heal(healAmount);
@@ -185,9 +195,8 @@ public class MainGameController {
                 int damage = 10 + (worldMap.getCurrentFloorNumber() * 5);
                 character.takeDamage(damage);
                 updateStats();
-                room.setConsumed(true);
                 if (!character.isAlive()) {
-                    showInfo("You died! Game over.");
+                    handlePlayerDeath();
                 } else {
                     showInfo("You triggered a trap! Took " + damage + " damage.");
                 }
@@ -232,6 +241,12 @@ public class MainGameController {
                 room.setConsumed(true);
                 try { Main.switchScene("combat"); } catch (Exception e) { e.printStackTrace(); }
             }
+            case BOSS_DOOR -> {
+                Enemy finalBoss = EnemyPool.getEnemy(character.getCharacterClass(), 11, true);
+                CombatSession.start(finalBoss);
+                room.setConsumed(true);
+                try { Main.switchScene("combat"); } catch (Exception e) { e.printStackTrace(); }
+            }
             default -> {}
 
         }
@@ -240,6 +255,7 @@ public class MainGameController {
     private void handleSave() {
         if (character != null) {
             SaveManager.saveCharacter(Session.getCurrentUser(), character);
+            SaveManager.saveWorld(Session.getCurrentUser(), worldMap);
             showInfo("Game saved!");
         }
     }
@@ -255,14 +271,19 @@ public class MainGameController {
 
     @FXML
     private void handleInventory() {
-        // Coming soon
-        showInfo("Inventory coming soon!");
+        try {
+            InventoryController.setReturnScene("main-game");
+            Main.switchScene("inventory");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void handleQuit() {
         if (character != null) {
             SaveManager.saveCharacter(Session.getCurrentUser(), character);
+            SaveManager.saveWorld(Session.getCurrentUser(), worldMap);
         }
         try {
             Session.clear();
@@ -284,5 +305,53 @@ public class MainGameController {
         alert.getDialogPane().setPrefWidth(400);
         alert.getDialogPane().setPrefHeight(150);
         alert.showAndWait();
+    }
+    private void handlePlayerDeath() {
+        character.applyDeathPenalty();
+        SaveManager.saveCharacter(Session.getCurrentUser(), character);
+
+        if (character.getLives() <= 0) {
+            handleGameOver();
+        } else {
+            Session.setWorldMap(new WorldMap());
+            worldMap = Session.getWorldMap();
+            showInfo("You died! You have " + character.getLives() + " lives remaining.\n" +
+                    "You lost 25% gold and XP.\nReturning to floor 1...");
+            updateStats();
+            renderMap();
+        }
+    }
+
+    private void handleGameOver() {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                javafx.scene.control.Alert.AlertType.CONFIRMATION
+        );
+        alert.initOwner(Main.getPrimaryStage());
+        alert.setTitle("Game Over");
+        alert.setHeaderText("You have no lives remaining!");
+        alert.setContentText("What would you like to do?");
+
+        javafx.scene.control.ButtonType restartButton =
+                new javafx.scene.control.ButtonType("Restart from Floor 1");
+        javafx.scene.control.ButtonType newCharButton =
+                new javafx.scene.control.ButtonType("Delete & New Character");
+
+        alert.getButtonTypes().setAll(restartButton, newCharButton);
+        alert.getDialogPane().setPrefWidth(400);
+
+        alert.showAndWait().ifPresent(choice -> {
+            if (choice == restartButton) {
+                character.resetToFloorOne();
+                Session.setWorldMap(new WorldMap());
+                worldMap = Session.getWorldMap();
+                SaveManager.saveCharacter(Session.getCurrentUser(), character);
+                updateStats();
+                renderMap();
+            } else {
+                SaveManager.deleteSave(Session.getCurrentUser());
+                Session.clear();
+                try { Main.switchScene("create-character"); } catch (Exception e) { e.printStackTrace(); }
+            }
+        });
     }
 }

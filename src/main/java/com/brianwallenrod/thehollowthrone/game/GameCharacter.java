@@ -70,9 +70,9 @@ public class GameCharacter {
 
     private void applyClassStats() {
         switch (characterClass) {
-            case WARRIOR -> { maxHp = 120; strength = 10; dexterity = 5; intelligence = 3; }
-            case MAGE ->    { maxHp = 70;  strength = 3;  dexterity = 5; intelligence = 12; }
-            case ROGUE ->   { maxHp = 90;  strength = 6;  dexterity = 12; intelligence = 5; }
+            case WARRIOR -> { maxHp = 150; strength = 12; dexterity = 6; intelligence = 3; }
+            case MAGE ->    { maxHp = 90;  strength = 4;  dexterity = 6; intelligence = 14; }
+            case ROGUE ->   { maxHp = 110; strength = 7;  dexterity = 14; intelligence = 5; }
         }
         this.hp = maxHp;
     }

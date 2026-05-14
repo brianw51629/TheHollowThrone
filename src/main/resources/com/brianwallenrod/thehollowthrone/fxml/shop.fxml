@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0"
+            style="-fx-background-color: #1a1a2e;"
+            xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.brianwallenrod.thehollowthrone.controllers.ShopController">
+    <children>
+
+        <!-- Title -->
+        <Label text="SHOP"
+               alignment="CENTER"
+               maxWidth="1.7976931348623157E38"
+               style="-fx-text-fill: white; -fx-font-size: 48px; -fx-font-weight: bold;"
+               AnchorPane.leftAnchor="0.0"
+               AnchorPane.rightAnchor="0.0"
+               AnchorPane.topAnchor="40.0"/>
+
+        <!-- Gold label -->
+        <Label fx:id="goldLabel" text="Gold: 0"
+               alignment="CENTER"
+               maxWidth="1.7976931348623157E38"
+               style="-fx-text-fill: #ffd700; -fx-font-size: 24px; -fx-font-weight: bold;"
+               AnchorPane.leftAnchor="0.0"
+               AnchorPane.rightAnchor="0.0"
+               AnchorPane.topAnchor="110.0"/>
+
+        <!-- Item 1 -->
+        <Rectangle arcWidth="10" arcHeight="10"
+                   fill="#0d0d1a" stroke="#444466"
+                   width="500.0" height="180.0"
+                   AnchorPane.leftAnchor="710.0"
+                   AnchorPane.topAnchor="180.0"/>
+        <Label fx:id="item1Name" text=""
+               style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"
+               AnchorPane.leftAnchor="730.0"
+               AnchorPane.topAnchor="200.0"/>
+        <Label fx:id="item1Desc" text=""
+               wrapText="true" maxWidth="460.0"
+               style="-fx-text-fill: #aaaaff; -fx-font-size: 15px;"
+               AnchorPane.leftAnchor="730.0"
+               AnchorPane.topAnchor="235.0"/>
+        <Label fx:id="item1Price" text=""
+               style="-fx-text-fill: #ffd700; -fx-font-size: 16px;"
+               AnchorPane.leftAnchor="730.0"
+               AnchorPane.topAnchor="300.0"/>
+        <Button fx:id="buyButton1" text="BUY"
+                prefWidth="120.0" prefHeight="40.0"
+                style="-fx-font-size: 15px; -fx-font-weight: bold;"
+                onAction="#handleBuy1"
+                AnchorPane.leftAnchor="1070.0"
+                AnchorPane.topAnchor="290.0"/>
+
+        <!-- Item 2 -->
+        <Rectangle arcWidth="10" arcHeight="10"
+                   fill="#0d0d1a" stroke="#444466"
+                   width="500.0" height="180.0"
+                   AnchorPane.leftAnchor="710.0"
+                   AnchorPane.topAnchor="390.0"/>
+        <Label fx:id="item2Name" text=""
+               style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"
+               AnchorPane.leftAnchor="730.0"
+               AnchorPane.topAnchor="410.0"/>
+        <Label fx:id="item2Desc" text=""
+               wrapText="true" maxWidth="460.0"
+               style="-fx-text-fill: #aaaaff; -fx-font-size: 15px;"
+               AnchorPane.leftAnchor="730.0"
+               AnchorPane.topAnchor="445.0"/>
+        <Label fx:id="item2Price" text=""
+               style="-fx-text-fill: #ffd700; -fx-font-size: 16px;"
+               AnchorPane.leftAnchor="730.0"
+               AnchorPane.topAnchor="510.0"/>
+        <Button fx:id="buyButton2" text="BUY"
+                prefWidth="120.0" prefHeight="40.0"
+                style="-fx-font-size: 15px; -fx-font-weight: bold;"
+                onAction="#handleBuy2"
+                AnchorPane.leftAnchor="1070.0"
+                AnchorPane.topAnchor="500.0"/>
+
+        <!-- Item 3 -->
+        <Rectangle arcWidth="10" arcHeight="10"
+                   fill="#0d0d1a" stroke="#444466"
+                   width="500.0" height="180.0"
+                   AnchorPane.leftAnchor="710.0"
+                   AnchorPane.topAnchor="600.0"/>
+        <Label fx:id="item3Name" text=""
+               style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"
+               AnchorPane.leftAnchor="730.0"
+               AnchorPane.topAnchor="620.0"/>
+        <Label fx:id="item3Desc" text=""
+               wrapText="true" maxWidth="460.0"
+               style="-fx-text-fill: #aaaaff; -fx-font-size: 15px;"
+               AnchorPane.leftAnchor="730.0"
+               AnchorPane.topAnchor="655.0"/>
+        <Label fx:id="item3Price" text=""
+               style="-fx-text-fill: #ffd700; -fx-font-size: 16px;"
+               AnchorPane.leftAnchor="730.0"
+               AnchorPane.topAnchor="720.0"/>
+        <Button fx:id="buyButton3" text="BUY"
+                prefWidth="120.0" prefHeight="40.0"
+                style="-fx-font-size: 15px; -fx-font-weight: bold;"
+                onAction="#handleBuy3"
+                AnchorPane.leftAnchor="1070.0"
+                AnchorPane.topAnchor="710.0"/>
+
+        <!-- Back Button -->
+        <Button text="LEAVE SHOP"
+                prefWidth="220.0" prefHeight="55.0"
+                style="-fx-font-size: 16px; -fx-font-weight: bold;"
+                onAction="#handleBack"
+                AnchorPane.leftAnchor="850.0"
+                AnchorPane.bottomAnchor="40.0"/>
+
+    </children>
+</AnchorPane>
