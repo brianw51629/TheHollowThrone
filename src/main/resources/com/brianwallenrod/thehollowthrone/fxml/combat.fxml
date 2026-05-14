@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #1a1a2e;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.brianwallenrod.thehollowthrone.controllers.CombatController">
+
+    <children>
+
+        <!-- ═══════════════════════ TOP BAR ═══════════════════════ -->
+
+        <!-- Floor label - top left -->
+        <Label fx:id="floorLabel" style="-fx-text-fill: white; -fx-font-size: 18px;" text="Floor 1" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="15.0" />
+
+        <!-- Player HP - top left below floor -->
+        <Label fx:id="playerHpLabel" style="-fx-text-fill: #6bff6b; -fx-font-size: 18px;" text="HP: 120/120" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="45.0" />
+
+        <!-- Enemy name - centered at top -->
+        <Label fx:id="enemyNameLabel" alignment="CENTER" maxWidth="1.7976931348623157E38" style="-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;" text="Enemy Name" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0" />
+
+        <!-- Enemy HP - centered below enemy name -->
+        <Label fx:id="enemyHpLabel" alignment="CENTER" maxWidth="1.7976931348623157E38" style="-fx-text-fill: #ff6b6b; -fx-font-size: 18px;" text="HP: 100/100" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0" />
+
+        <!-- Player character image - left side -->
+        <ImageView fx:id="playerView"
+                   fitWidth="300.0"
+                   pickOnBounds="true" preserveRatio="true"
+                   AnchorPane.topAnchor="120.0"
+                   AnchorPane.leftAnchor="100.0"
+                   AnchorPane.bottomAnchor="320.0"/>
+
+        <!-- Enemy image - right side -->
+        <ImageView fx:id="enemyView"
+                   fitWidth="300.0"
+                   pickOnBounds="true" preserveRatio="true"
+                   AnchorPane.topAnchor="120.0"
+                   AnchorPane.rightAnchor="100.0"
+                   AnchorPane.bottomAnchor="320.0"/>
+
+        <!-- ═══════════════════════ BOTTOM PANEL ═══════════════════════ -->
+
+        <!-- Combat log background -->
+        <Rectangle arcHeight="10" arcWidth="10" fill="#0d0d1a" height="275.0" stroke="#444466" width="910.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
+
+        <!-- Combat log text area -->
+        <TextArea fx:id="combatLog" editable="false" prefHeight="255.0" prefWidth="890.0" style="-fx-control-inner-background: #0d0d1a; -fx-text-fill: white; -fx-font-size: 14px;" wrapText="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+
+        <!-- Action buttons 2x2 grid - bottom right -->
+        <Button fx:id="attackButton" onAction="#handleAttack" prefHeight="70.0" prefWidth="220.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="ATTACK" AnchorPane.bottomAnchor="160.0" AnchorPane.rightAnchor="30.0" />
+
+        <Button fx:id="specialButton" onAction="#handleSpecial" prefHeight="70.0" prefWidth="220.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="SPECIAL" AnchorPane.bottomAnchor="160.0" AnchorPane.rightAnchor="270.0" />
+
+        <Button fx:id="itemButton" onAction="#handleItem" prefHeight="70.0" prefWidth="220.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="USE ITEM" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="30.0" />
+
+        <Button fx:id="fleeButton" onAction="#handleFlee" prefHeight="70.0" prefWidth="220.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="FLEE" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="270.0" />
+
+    </children>
+</AnchorPane>
