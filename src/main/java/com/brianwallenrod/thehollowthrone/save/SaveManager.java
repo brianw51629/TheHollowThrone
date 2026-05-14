@@ -33,6 +33,14 @@ public class SaveManager {
             return null;
         }
     }
+    public static void deleteSave(String username) {
+        try {
+            Files.deleteIfExists(Path.of(SAVES_DIR + username + ".json"));
+            System.out.println("Save deleted for: " + username);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static boolean hasSave(String username) {
         return Files.exists(Path.of(SAVES_DIR + username + ".json"));

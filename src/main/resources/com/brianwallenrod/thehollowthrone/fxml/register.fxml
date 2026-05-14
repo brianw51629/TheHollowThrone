@@ -5,20 +5,70 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Rectangle?>
 
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0"
+            style="-fx-background-color: #1a1a2e;"
+            xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.brianwallenrod.thehollowthrone.controllers.RegisterController">
+    <children>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.brianwallenrod.thehollowthrone.controllers.RegisterController">
-   <children>
-      <Label layoutX="219.0" layoutY="14.0" text=" Create Account">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <TextField fx:id="usernameField" layoutX="220.0" layoutY="67.0" promptText="USERNAME" />
-      <PasswordField fx:id="passwordField" layoutX="220.0" layoutY="111.0" promptText="PASSWORD" />
-      <PasswordField fx:id="confirmPasswordField" layoutX="220.0" layoutY="159.0" promptText="CONFIRM PASSWORD" />
-      <Button layoutX="266.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleRegister" text="Register" />
-      <Button layoutX="273.0" layoutY="243.0" mnemonicParsing="false" onAction="#handleBack" text="Login" />
-   </children>
+        <!-- Title -->
+        <Label text="CREATE ACCOUNT"
+               alignment="CENTER"
+               maxWidth="1.7976931348623157E38"
+               style="-fx-text-fill: white; -fx-font-size: 48px; -fx-font-weight: bold;"
+               AnchorPane.leftAnchor="0.0"
+               AnchorPane.rightAnchor="0.0"
+               AnchorPane.topAnchor="260.0"/>
+
+        <!-- Card background -->
+        <Rectangle arcWidth="20" arcHeight="20"
+                   width="400.0" height="380.0"
+                   fill="#0d0d1a" stroke="#444466"
+                   AnchorPane.leftAnchor="760.0"
+                   AnchorPane.topAnchor="350.0"/>
+
+        <!-- Username -->
+        <TextField fx:id="usernameField"
+                   promptText="USERNAME"
+                   prefWidth="300.0" prefHeight="40.0"
+                   style="-fx-font-size: 16px;"
+                   AnchorPane.leftAnchor="810.0"
+                   AnchorPane.topAnchor="390.0"/>
+
+        <!-- Password -->
+        <PasswordField fx:id="passwordField"
+                       promptText="PASSWORD"
+                       prefWidth="300.0" prefHeight="40.0"
+                       style="-fx-font-size: 16px;"
+                       AnchorPane.leftAnchor="810.0"
+                       AnchorPane.topAnchor="450.0"/>
+
+        <!-- Confirm Password -->
+        <PasswordField fx:id="confirmPasswordField"
+                       promptText="CONFIRM PASSWORD"
+                       prefWidth="300.0" prefHeight="40.0"
+                       style="-fx-font-size: 16px;"
+                       AnchorPane.leftAnchor="810.0"
+                       AnchorPane.topAnchor="510.0"/>
+
+        <!-- Register Button -->
+        <Button text="Register"
+                prefWidth="300.0" prefHeight="45.0"
+                style="-fx-font-size: 16px; -fx-font-weight: bold;"
+                onAction="#handleRegister"
+                AnchorPane.leftAnchor="810.0"
+                AnchorPane.topAnchor="575.0"/>
+
+        <!-- Back to Login -->
+        <Button text="Back to Login"
+                prefWidth="300.0" prefHeight="45.0"
+                style="-fx-font-size: 16px;"
+                onAction="#handleBack"
+                AnchorPane.leftAnchor="810.0"
+                AnchorPane.topAnchor="635.0"/>
+
+    </children>
 </AnchorPane>

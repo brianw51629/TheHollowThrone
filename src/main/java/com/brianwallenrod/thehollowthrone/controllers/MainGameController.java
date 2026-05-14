@@ -1,7 +1,10 @@
 package com.brianwallenrod.thehollowthrone.controllers;
 
+import com.brianwallenrod.thehollowthrone.CombatSession;
 import com.brianwallenrod.thehollowthrone.Main;
 import com.brianwallenrod.thehollowthrone.Session;
+import com.brianwallenrod.thehollowthrone.combat.Enemy;
+import com.brianwallenrod.thehollowthrone.combat.EnemyPool;
 import com.brianwallenrod.thehollowthrone.game.GameCharacter;
 import com.brianwallenrod.thehollowthrone.save.SaveManager;
 import com.brianwallenrod.thehollowthrone.world.WorldMap;
@@ -15,7 +18,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import com.brianwallenrod.thehollowthrone.world.Floor;
 import com.brianwallenrod.thehollowthrone.world.Room;
+import com.brianwallenrod.thehollowthrone.CombatSession;
+import com.brianwallenrod.thehollowthrone.combat.Enemy;
+import com.brianwallenrod.thehollowthrone.combat.EnemyPool;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class MainGameController {
@@ -38,7 +45,13 @@ public class MainGameController {
     @FXML
     public void initialize() {
         character = SaveManager.loadCharacter(Session.getCurrentUser());
-        worldMap = new WorldMap();
+
+        // Only create new world if one doesn't exist yet
+        if (Session.getWorldMap() == null) {
+            Session.setWorldMap(new WorldMap());
+        }
+        worldMap = Session.getWorldMap();
+
         if (character != null) {
             updateStats();
         }
@@ -49,12 +62,13 @@ public class MainGameController {
     private void updateStats() {
         nameLabel.setText("Name: " + character.getName());
         classLabel.setText("Class: " + character.getCharacterClass());
-        levelLabel.setText("Level: " + character.getLevel());
+        levelLabel.setText("Level: " + character.getLevel() + " | Floor: " + worldMap.getCurrentFloorNumber());
         hpLabel.setText("HP: " + character.getHp() + "/" + character.getMaxHp());
         strLabel.setText("STR: " + character.getStrength());
         dexLabel.setText("DEX: " + character.getDexterity());
         intLabel.setText("INT: " + character.getIntelligence());
         xpLabel.setText("XP: " + character.getXp() + " | Gold: " + character.getGold());
+        hpLabel.setText("HP: " + character.getHp() + "/" + character.getMaxHp() + " | Lives: " + character.getLives());
     }
 
     private void loadCharacterImage() {
@@ -115,7 +129,13 @@ public class MainGameController {
 
                     final int finalDr = dr;
                     final int finalDc = dc;
-                    cell.setOnMouseClicked(e -> handleMove(finalDr, finalDc));
+                    cell.setOnMouseClicked(e -> {
+                        try {
+                            handleMove(finalDr, finalDc);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    });
                     cell.setStyle("-fx-cursor: hand;");
                 }
 
@@ -139,7 +159,7 @@ public class MainGameController {
         };
     }
 
-    private void handleMove(int dRow, int dCol) {
+    private void handleMove(int dRow, int dCol) throws IOException {
         Floor floor = worldMap.getCurrentFloor();
         boolean moved = floor.movePlayer(dRow, dCol);
         if (moved) {
@@ -148,7 +168,7 @@ public class MainGameController {
         }
     }
 
-    private void handleRoomEvent() {
+    private void handleRoomEvent() throws IOException {
         Room room = worldMap.getCurrentFloor().getCurrentRoom();
 
         if (room.isConsumed()) return; // already triggered, do nothing
@@ -184,12 +204,36 @@ public class MainGameController {
                 renderMap();
                 showInfo("You descend to floor " + worldMap.getCurrentFloorNumber() + "!");
             }
-            case ENEMY  -> showInfo("An enemy appears!");
-            case ELITE  -> showInfo("An elite enemy blocks your path!");
-            case BOSS   -> showInfo("A powerful boss emerges!");
-            case BOSS_DOOR -> showInfo("The final boss awaits...");
-            case SHOP   -> showInfo("Welcome to the shop!");
+            case ENEMY -> {
+                Enemy enemy = EnemyPool.getEnemy(character.getCharacterClass(),
+                        worldMap.getCurrentFloorNumber(), false);
+                CombatSession.start(enemy);
+                room.setConsumed(true);
+                try { Main.switchScene("combat"); } catch (Exception e) { e.printStackTrace(); }
+            }
+            case ELITE -> {
+                Enemy enemy = EnemyPool.getEnemy(character.getCharacterClass(),
+                        worldMap.getCurrentFloorNumber(), false);
+                Enemy elite = new Enemy("Elite: " + enemy.getName(),
+                        (int)(enemy.getMaxHp() * 1.5),
+                        (int)(enemy.getStrength() * 1.3),
+                        (int)(enemy.getDexterity() * 1.3),
+                        (int)(enemy.getXpReward() * 1.5),
+                        (int)(enemy.getGoldReward() * 1.5),
+                        false);
+                CombatSession.start(elite);
+                room.setConsumed(true);
+                try { Main.switchScene("combat"); } catch (Exception e) { e.printStackTrace(); }
+            }
+            case BOSS -> {
+                Enemy boss = EnemyPool.getEnemy(character.getCharacterClass(),
+                        worldMap.getCurrentFloorNumber(), true);
+                CombatSession.start(boss);
+                room.setConsumed(true);
+                try { Main.switchScene("combat"); } catch (Exception e) { e.printStackTrace(); }
+            }
             default -> {}
+
         }
     }
     @FXML
@@ -230,8 +274,15 @@ public class MainGameController {
 
     private void showInfo(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.initOwner(Main.getPrimaryStage());
+        alert.setTitle("The Hollow Throne");
         alert.setHeaderText(null);
         alert.setContentText(message);
+        alert.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+
+        // Make it small and centered
+        alert.getDialogPane().setPrefWidth(400);
+        alert.getDialogPane().setPrefHeight(150);
         alert.showAndWait();
     }
 }

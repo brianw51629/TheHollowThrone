@@ -5,19 +5,63 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Rectangle?>
 
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0"
+            style="-fx-background-color: #1a1a2e;"
+            xmlns="http://javafx.com/javafx/26"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.brianwallenrod.thehollowthrone.controllers.CharacterCreateController">
+    <children>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.brianwallenrod.thehollowthrone.controllers.CharacterCreateController">
-   <children>
-      <Label layoutX="188.0" layoutY="14.0" text="Create Your Character">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <TextField fx:id="nameField" layoutX="220.0" layoutY="60.0" promptText="Character Name" />
-      <ComboBox fx:id="classComboBox" layoutX="220.0" layoutY="100.0" prefWidth="150.0" promptText="Class Picker" />
-      <Label fx:id="statsLabel" layoutX="280.0" layoutY="152.0" text="Stats" />
-      <Button layoutX="233.0" layoutY="360.0" mnemonicParsing="false" onAction="#handleCreate" text="Begin Your Journey" />
-   </children>
+        <!-- Title -->
+        <Label text="CREATE YOUR CHARACTER"
+               alignment="CENTER"
+               maxWidth="1.7976931348623157E38"
+               style="-fx-text-fill: white; -fx-font-size: 48px; -fx-font-weight: bold;"
+               AnchorPane.leftAnchor="0.0"
+               AnchorPane.rightAnchor="0.0"
+               AnchorPane.topAnchor="220.0"/>
+
+        <!-- Card background -->
+        <Rectangle arcWidth="20" arcHeight="20"
+                   width="400.0" height="420.0"
+                   fill="#0d0d1a" stroke="#444466"
+                   AnchorPane.leftAnchor="760.0"
+                   AnchorPane.topAnchor="310.0"/>
+
+        <!-- Character Name -->
+        <TextField fx:id="nameField"
+                   promptText="CHARACTER NAME"
+                   prefWidth="300.0" prefHeight="40.0"
+                   style="-fx-font-size: 16px;"
+                   AnchorPane.leftAnchor="810.0"
+                   AnchorPane.topAnchor="350.0"/>
+
+        <!-- Class Picker -->
+        <ComboBox fx:id="classComboBox"
+                  promptText="SELECT CLASS"
+                  prefWidth="300.0" prefHeight="40.0"
+                  style="-fx-font-size: 16px;"
+                  AnchorPane.leftAnchor="810.0"
+                  AnchorPane.topAnchor="410.0"/>
+
+        <!-- Stats label -->
+        <Label fx:id="statsLabel"
+               text=""
+               alignment="CENTER"
+               maxWidth="400.0"
+               style="-fx-text-fill: #aaaaff; -fx-font-size: 15px;"
+               AnchorPane.leftAnchor="860.0"
+               AnchorPane.topAnchor="470.0"/>
+
+        <!-- Begin Journey Button -->
+        <Button text="Begin Your Journey"
+                prefWidth="300.0" prefHeight="45.0"
+                style="-fx-font-size: 16px; -fx-font-weight: bold;"
+                onAction="#handleCreate"
+                AnchorPane.leftAnchor="810.0"
+                AnchorPane.topAnchor="640.0"/>
+
+    </children>
 </AnchorPane>

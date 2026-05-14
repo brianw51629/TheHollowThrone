@@ -14,16 +14,24 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
         stage.setTitle("The Hollow Throne");
-        stage.setMaximized(true);
         switchScene("login");
         stage.show();
     }
 
     public static void switchScene(String fxmlName) throws IOException {
-        FXMLLoader loader = new FXMLLoader(
-                Main.class.getResource("/com/brianwallenrod/thehollowthrone/fxml/" + fxmlName + ".fxml")
-        );
-        Scene scene = new Scene(loader.load());
+        var url = Main.class.getResource("/com/brianwallenrod/thehollowthrone/fxml/" + fxmlName + ".fxml");
+        System.out.println("Loading: " + url);
+        if (url == null) {
+            System.out.println("ERROR: FXML file not found: " + fxmlName);
+            return;
+        }
+
+        FXMLLoader loader = new FXMLLoader(url);
+        javafx.scene.Parent root = loader.load();
+
+        javafx.geometry.Rectangle2D screenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+        Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
+
         primaryStage.setScene(scene);
     }
 
