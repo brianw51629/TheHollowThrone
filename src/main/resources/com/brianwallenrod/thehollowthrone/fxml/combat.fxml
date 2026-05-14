@@ -47,8 +47,12 @@
         <Rectangle arcHeight="10" arcWidth="10" fill="#0d0d1a" height="275.0" stroke="#444466" width="910.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
 
         <!-- Combat log text area -->
-        <TextArea fx:id="combatLog" editable="false" prefHeight="255.0" prefWidth="890.0" style="-fx-control-inner-background: #0d0d1a; -fx-text-fill: white; -fx-font-size: 14px;" wrapText="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
-
+        <TextArea fx:id="combatLog"
+                  editable="false" wrapText="true"
+                  prefWidth="890.0" prefHeight="255.0"
+                  style="-fx-control-inner-background: #0d0d1a; -fx-text-fill: white; -fx-font-size: 14px; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;"
+                  AnchorPane.leftAnchor="10.0"
+                  AnchorPane.bottomAnchor="10.0"/>
         <!-- Action buttons 2x2 grid - bottom right -->
         <Button fx:id="attackButton" onAction="#handleAttack" prefHeight="70.0" prefWidth="220.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="ATTACK" AnchorPane.bottomAnchor="160.0" AnchorPane.rightAnchor="30.0" />
 

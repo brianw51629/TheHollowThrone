@@ -47,6 +47,7 @@ public class CombatController {
         floorLabel.setText("Floor " + worldMap.getCurrentFloorNumber());
         updateHpLabels();
         loadPlayerImage();
+        loadEnemyImage();
         specialButton.setText(CombatEngine.getSpecialName(player));
 
         if (CombatSession.isReturningFromInventory()) {
@@ -128,7 +129,37 @@ public class CombatController {
         disableButtons();
         enemyTurn();
     }
+    private void loadEnemyImage() {
+        try {
+            String imageName = getEnemyImageName();
+            var url = getClass().getResource("/com/brianwallenrod/thehollowthrone/assets/" + imageName);
+            if (url != null) {
+                Image img = new Image(url.toExternalForm());
+                enemyView.setImage(img);
+                enemyView.setSmooth(false);
+            }
+        } catch (Exception e) {
+            System.out.println("Could not load enemy image: " + e.getMessage());
+        }
+    }
 
+    private String getEnemyImageName() {
+        String prefix = switch (player.getCharacterClass()) {
+            case WARRIOR -> "warrior";
+            case MAGE    -> "mage";
+            case ROGUE   -> "rogue";
+        };
+
+        int floor = Session.getWorldMap().getCurrentFloorNumber();
+
+        if (floor == 11) return prefix + "_finalboss.png";
+        if (enemy.isBoss()) return prefix + "_boss.png";
+
+        // Elite enemies appear on even floors
+        if (floor % 2 == 0) return prefix + "_elite.png";
+
+        return prefix + "_enemy.png";
+    }
 
 
     @FXML
