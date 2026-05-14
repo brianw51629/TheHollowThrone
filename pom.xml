@@ -169,7 +169,7 @@
                 </os>
             </activation>
             <properties>
-                <package.type>MSI</package.type>
+                <package.type>EXE</package.type>
             </properties>
         </profile>
     </profiles>
