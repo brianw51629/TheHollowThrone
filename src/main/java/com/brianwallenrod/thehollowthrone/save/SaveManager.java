@@ -8,7 +8,7 @@ import java.nio.file.*;
 
 public class SaveManager {
 
-    private static final String SAVES_DIR = "data/saves/";
+    private static final String SAVES_DIR = System.getProperty("user.home") + "/TheHollowThrone/saves/";
     private static final Gson gson = new Gson();
 
     public static void saveCharacter(String username, GameCharacter character) {

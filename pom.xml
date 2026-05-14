@@ -35,7 +35,6 @@
             <artifactId>javafx-fxml</artifactId>
             <version>26</version>
         </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -67,7 +66,6 @@
                 <version>0.0.8</version>
                 <executions>
                     <execution>
-                        <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
@@ -83,6 +81,97 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/libs</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.brianwallenrod.thehollowthrone</groupId>
+                                    <artifactId>hollowthrone</artifactId>
+                                    <version>1.0-SNAPSHOT</version>
+                                    <destFileName>hollowthrone-1.0-SNAPSHOT.jar</destFileName>
+                                    <outputDirectory>target/libs</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.panteleyev</groupId>
+                <artifactId>jpackage-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <name>TheHollowThrone</name>
+                    <appVersion>1.0.0</appVersion>
+                    <vendor>Brian Wallenrod</vendor>
+                    <destination>target/dist</destination>
+                    <input>target/libs</input>
+                    <mainClass>com.brianwallenrod.thehollowthrone.Main</mainClass>
+                    <mainJar>hollowthrone-1.0-SNAPSHOT.jar</mainJar>
+                    <type>${package.type}</type>
+                    <modulePaths>
+                        <modulePath>target/libs</modulePath>
+                    </modulePaths>
+                    <addModules>
+                        <addModule>javafx.controls</addModule>
+                        <addModule>javafx.fxml</addModule>
+                        <addModule>javafx.graphics</addModule>
+                        <addModule>javafx.base</addModule>
+                    </addModules>
+                    <javaOptions>
+                        <option>--module-path</option>
+                        <option>$APPDIR</option>
+                        <option>--add-modules</option>
+                        <option>javafx.controls,javafx.fxml,javafx.graphics,javafx.base</option>
+                    </javaOptions>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>mac</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <package.type>DMG</package.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <package.type>MSI</package.type>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>
